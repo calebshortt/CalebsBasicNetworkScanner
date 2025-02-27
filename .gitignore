@@ -1,0 +1,10 @@
+
+ips/*
+scans/*
+__pycache__
+
+
+state.json
+networkscanner.log
+*.pyc
+

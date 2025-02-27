@@ -1,0 +1,10 @@
+
+
+Basic NMap command to find all IPs:
+> nmap -sn 192.168.1.1/24 | grep "scan report" | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b" > ips/found_ips
+
+Basic NMap command to scan a specific IP:
+> sudo nmap -sV -O --osscan-guess <ip address> > scans/<ipaddress>.txt
+
+Run Network Scanner:
+> sudo /usr/bin/python basic_network_scanner.py

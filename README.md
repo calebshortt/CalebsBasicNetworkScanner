@@ -60,7 +60,7 @@ Here are some quick steps to set up automated scans on your network using system
     [Install]
     WantedBy=multi-user.target
     ```
-3. Create the service you reference in your timer file (ex: calebs_networkservice.service)
+3. Create the service you reference in your timer file (ex: calebs_networkscanner.service)
     ```sudo vim /etc/systemd/system/calebs_networkscanner.service```
 
 4. Enter the service information like the example below, change ```<PATH TO NETWORK SCANNER>``` to the actual path to your network scanner, and save (```:wq```):

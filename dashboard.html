@@ -122,18 +122,22 @@ function addipscan(ip, ip_json) {
     div_port_container.setAttribute("class", "list-group-item d-flex justify-content-between align-items-center");
     ul_datacontainer.appendChild(div_port_container);
 
-    var ul_port_list = document.createElement("ul");
-    ul_port_list.setAttribute("class", "list-group d-flex");
-    ul_port_list.setAttribute("style", "margin-top: 10px;");
-    div_port_container.appendChild(ul_port_list);
 
-    // Deal with port data
+    // Deal with port data -- table approach
     if("ports" in ip_json) {
-        var div_port_title = document.createElement("div");
-        //div_port_title.setAttribute("class", "list-group-item active d-flex justify-content-between align-items-center");
-        div_port_title.setAttribute("class", "list-group-item active");
-        div_port_title.innerHTML = "Ports";
-        ul_port_list.appendChild(div_port_title);
+
+        var div_port_table = document.createElement("table");
+        div_port_table.setAttribute("class", "table");
+        div_port_container.appendChild(div_port_table);
+
+        var thead_header = document.createElement("thead");
+        var th_tr = document.createElement("tr");
+        th_tr.innerHTML = "<th scope=\"col\">Port Num</th><th scope=\"col\">Protocol</th><th scope=\"col\">Service</th><th scope=\"col\">State</th><th scope=\"col\">Version</th><th scope=\"col\">Last Seen</th>";
+        thead_header.appendChild(th_tr);
+        div_port_table.appendChild(thead_header);
+
+        var t_body = document.createElement("tbody");
+        div_port_table.appendChild(t_body);
 
         var all_port_data = ip_json["ports"];
 
@@ -150,30 +154,22 @@ function addipscan(ip, ip_json) {
             var vers = port_data["version"] ?? "None";
             var lseen = port_data["last seen"] ?? "None";
 
-            var str_pdata = "<span class=\"badge text-bg-info rounded-pill\">" + num + "</span>\t|\t<span>" + prot + "\t|\t" + serv + "\t|\t" + state + "\t|\t" + vers + "\t|\t" + lseen + "</span>";
-            var li_pd = document.createElement("li");
-            li_pd.setAttribute("class", "list-group-item d-flex justify-content-between align-items-center");
-            li_pd.innerHTML = str_pdata;
-            ul_port_list.appendChild(li_pd);
+            // Not the nicest way to do this
+            var str_pdata = "<th scope=\"row\" class=\"badge text-bg-info rounded-pill\">" + num + "</th><td>" + prot + "</td><td>" + serv + "</td><td>" + state + "</td><td>" + vers + "</td><td>" + lseen + "</td>";
+
+
+            var tr_pd = document.createElement("tr");
+            tr_pd.innerHTML = str_pdata;
+            t_body.appendChild(tr_pd);
 
         }
 
     }
 
 
-
     // Done adding data, add data container to scan data div
     var div_scandata_content = document.createTextNode(JSON.stringify(ip_json, undefined, 2));
     div_scandata.appendChild(ul_datacontainer);
-
-    /*
-    // Timestamp
-    var small_date = document.createElement("small");
-    small_date.setAttribute("class", "opacity-50 text-nowrap");
-    var small_datecontent = document.createTextNode("Last Seen: " + ip_json["last seen"]);
-    small_date.appendChild(small_datecontent);
-    div_scancard.appendChild(small_date);
-    */
 }
 
 
@@ -195,9 +191,10 @@ window.setInterval(setstate,300000); // every 5 minutes
 <body onload='setstate()'>
 
 <div class="container">
-  <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-      <span class="fs-4">Caleb's Basic Network Scanner</span>
+  <header class="d-flex flex-wrap justify-content-between py-3 mb-4 border-bottom">
+    <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+      <img class="img-thumbnail" style="width: 100px;" alt="angry cat" src="img/AngryCat3.jpeg"></img>
+      <span class="fs-4 border-bottom">&nbsp Caleb's Basic Network Scanner</span>
     </a>
   </header>
 </div>

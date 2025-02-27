@@ -6,6 +6,8 @@ This is a simple network scanner. It uses nmap to find IPs on your home network,
 It saves the results to a JSON file, and to individual files for analysis.
 The JSON file is used by the local server to power the dashboard (dashboard.html)
 
+![alt text](img/screencap.jpeg)
+
 
 ## General Flow
 

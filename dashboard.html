@@ -162,6 +162,18 @@ function setstate() {
     console.log('' + currentdate + ' - Updating State.');
     $.getJSON("state.json", function(json) {
         document.getElementById("scanlist").textContent = "";
+
+        var curr_scan_length = Object.keys(json).length;
+
+
+        var summary_html = "<div>Most Recent Scan Completed at: <strong>" + currentdate + "</strong></div>";
+        summary_html += "<div>Discovered " + curr_scan_length + " IPs.</div>";
+
+        //document.getElementById("currentsummary").textContent = summary_html;
+        document.getElementById("currentsummary").innerHTML = summary_html;
+
+
+
         for (ip in json) {
             addipscan(ip, json[ip]);
         }
@@ -193,11 +205,12 @@ $("#expandall").click(function(e) {
   </header>
 </div>
 
-<!--
+
 <div class="container-xxl my-md-4 bd-layout d-flex justify-content-end">
-  <button id="expandall" class="btn btn-secondary" type="button">+ Expand All</button>
+  <!--<button id="expandall" class="btn btn-secondary" type="button">+ Expand All</button>-->
+  <div id="currentsummary"></div>
 </div>
--->
+
 
 <div class="container-xxl my-md-4 bd-layout">
   <div id="scanlist" class="accordion"></div>

@@ -1,74 +1,59 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 
+<!-- All the logic to dynamically update the scan table at 5min intervals -->
 <script>
 
 
-/*
-From Bootstrap
-<a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">                       a_scanitem
-    <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-    <div class="d-flex gap-2 w-100 justify-content-between">                                                            div_scancard
-        <div>                                                                                                           div_scancard_content
-            <h6 class="mb-0">List group item heading</h6>                                                               h6_title
-            <p class="mb-0 opacity-75">Some placeholder content in a paragraph.</p>                                     div_scandata
-        </div>
-        <small class="opacity-50 text-nowrap">now</small>                                                               small_date
-    </div>
-</a>
-*/
 function addipscan(ip, ip_json) {
-    //console.log(ip_json);
+
+
+    var str_ip = ip.replaceAll('.', '');
 
     // The actual list that this item will be added to
     var div_scanlist = document.getElementById("scanlist");
 
-    // Top level <a> that is the list item for a single scan. All data will be attached to this.
+
+    // All data will be attached to this.
     var a_scanitem = document.createElement("div");
-    a_scanitem.setAttribute("id", ip);
-    a_scanitem.setAttribute("href", "#");
-    a_scanitem.setAttribute("class", "list-group-item list-group-item-action d-flex gap-3 py-3");
-    a_scanitem.setAttribute("aria-current", "true");
+
+    a_scanitem.setAttribute("class", "accordion-item");
     div_scanlist.appendChild(a_scanitem);
 
-    var div_scancard = document.createElement("div");
-    //div_scancard.setAttribute("class", "d-flex gap-2 w-100 justify-content-between");
-    div_scancard.setAttribute("class", "d-flex w-100 justify-content-between");
-    a_scanitem.appendChild(div_scancard);
+    var scan_header = document.createElement("h2");
+    scan_header.setAttribute("class", "accordion-header");
+    scan_header.setAttribute("id", "heading" + str_ip);
+    a_scanitem.appendChild(scan_header);
 
-    var div_scancard_content = document.createElement("div");
-    div_scancard_content.setAttribute("class", "container");
-    div_scancard.appendChild(div_scancard_content);
+    var scan_header_button = document.createElement("button");
+    scan_header_button.setAttribute("class", "accordion-button");
+    scan_header_button.setAttribute("type", "button");
+    scan_header_button.setAttribute("data-bs-toggle", "collapse");
+    scan_header_button.setAttribute("data-bs-target", "#collapse" + str_ip);
+    scan_header_button.setAttribute("aria-expanded", "true");
+    scan_header_button.setAttribute("aria-controls", "collapse" + str_ip);
+    scan_header_button.innerHTML = "<strong>" + ip + "</strong>&nbsp (Last Seen: " + ip_json["last seen"] + ")";
+    scan_header.appendChild(scan_header_button);
 
-    var h6_title = document.createElement("h6");
-    h6_title.setAttribute("class", "mb-0 badge text-bg-primary rounded-pill");
-    h6_title.setAttribute("style", "font-size:1rem;");
-    var h6_titlecontent = document.createTextNode(ip);      // IP Address as the title
-    h6_title.appendChild(h6_titlecontent);
-    div_scancard_content.appendChild(h6_title);
-
-    // Timestamp
-    var small_date = document.createElement("small");
-    small_date.setAttribute("class", "opacity-50 text-nowrap");
-    var small_datecontent = document.createTextNode(" Last Seen: " + ip_json["last seen"]);
-    small_date.appendChild(small_datecontent);
-    div_scancard_content.appendChild(small_date);
-
-
-
-
+    var div_scandata_card = document.createElement("div");
+    div_scandata_card.setAttribute("id", "collapse"+str_ip);
+    div_scandata_card.setAttribute("class", "accordion-collapse collapse show");
+    div_scandata_card.setAttribute("aria-labelledby", "heading"+str_ip);
+    //div_scandata_card.setAttribute("data-bs-parent", "#scanlist");
 
     var div_scandata = document.createElement("div");
-    div_scandata.setAttribute("class", "mb-0 opacity-75");
-    //div_scandata.setAttribute("style", "display: flex; flex-wrap: wrap; flex: 0 0 100%;");
-    div_scancard_content.appendChild(div_scandata);
-
+    div_scandata.setAttribute("class", "accordion-body");
+    div_scandata_card.appendChild(div_scandata);
+    a_scanitem.appendChild(div_scandata_card);
 
 
     // Start of actual scan data display ------------------
@@ -143,7 +128,6 @@ function addipscan(ip, ip_json) {
 
         // NOTE: port will be the key for the dict entry
         for(port in all_port_data) {
-
             var port_data = all_port_data[port];
 
             // port: number, protocol, service, state, version, last seen
@@ -155,8 +139,7 @@ function addipscan(ip, ip_json) {
             var lseen = port_data["last seen"] ?? "None";
 
             // Not the nicest way to do this
-            var str_pdata = "<th scope=\"row\" class=\"badge text-bg-info rounded-pill\">" + num + "</th><td>" + prot + "</td><td>" + serv + "</td><td>" + state + "</td><td>" + vers + "</td><td>" + lseen + "</td>";
-
+            var str_pdata = "<th scope=\"row\" class=\"badge text-bg-info rounded-pill\" style=\"margin-top: 10px;\">" + num + "</th><td>" + prot + "</td><td>" + serv + "</td><td>" + state + "</td><td>" + vers + "</td><td>" + lseen + "</td>";
 
             var tr_pd = document.createElement("tr");
             tr_pd.innerHTML = str_pdata;
@@ -173,9 +156,11 @@ function addipscan(ip, ip_json) {
 }
 
 
+// The dynamic upload function. Gets the 'state.json' file from the local dir and parses it
 function setstate() {
+    var currentdate = new Date().toLocaleString();
+    console.log('' + currentdate + ' - Updating State.');
     $.getJSON("state.json", function(json) {
-        console.log(json);
         document.getElementById("scanlist").textContent = "";
         for (ip in json) {
             addipscan(ip, json[ip]);
@@ -183,12 +168,21 @@ function setstate() {
     });
 }
 
+// Set to update when initial load is complete and every 5 minutes after that
 window.setInterval(setstate,300000); // every 5 minutes
+$(document).ready(setstate);
+
+/*
+$("#expandall").click(function(e) {
+    $(".accordion-collapse").collapse("show");
+});
+*/
 
 </script>
 </head>
 
-<body onload='setstate()'>
+
+<body>
 
 <div class="container">
   <header class="d-flex flex-wrap justify-content-between py-3 mb-4 border-bottom">
@@ -199,9 +193,14 @@ window.setInterval(setstate,300000); // every 5 minutes
   </header>
 </div>
 
+<!--
+<div class="container-xxl my-md-4 bd-layout d-flex justify-content-end">
+  <button id="expandall" class="btn btn-secondary" type="button">+ Expand All</button>
+</div>
+-->
 
-<div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
-  <div id="scanlist" class="list-group"></div>
+<div class="container-xxl my-md-4 bd-layout">
+  <div id="scanlist" class="accordion"></div>
 </div>
 
 

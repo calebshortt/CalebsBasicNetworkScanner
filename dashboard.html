@@ -149,6 +149,49 @@ function addipscan(ip, ip_json) {
 
     }
 
+    // Display the RAW NMAP scan in an accordion style display.
+    if("raw_scan" in ip_json) {
+      var raw_data_text_container = document.createElement("li");
+      //raw_data_text_container.setAttribute("class", "list-group-item d-flex justify-content-between align-items-center");
+      raw_data_text_container.setAttribute("class", "list-group-item d-flex justify-content-between align-items-center");
+
+      var div_acccontainer = document.createElement("div");
+      div_acccontainer.setAttribute("class", "accordion container");
+
+      div_acccontainer.setAttribute("id", "accordionScan" + str_ip);
+      raw_data_text_container.appendChild(div_acccontainer);
+      ul_datacontainer.appendChild(raw_data_text_container);
+
+      // Scan item container
+      var div_rdc_accitem = document.createElement("div");
+      div_rdc_accitem.setAttribute("class", "accordion-item");
+      div_acccontainer.appendChild(div_rdc_accitem);
+
+      // Scan header + button
+      var h2_accitem = document.createElement("h2");
+      h2_accitem.setAttribute("class", "accordion-header");
+      h2_accitem.setAttribute("id", "scanheading" + str_ip);
+      h2_accitem.setAttribute("style", "background-color: green;");
+      div_rdc_accitem.appendChild(h2_accitem);
+
+      h2_accitem.innerHTML = "<button class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#scanCollapse" + str_ip + "\" aria-expanded=\"true\" aria-controls=\"scanCollapse" + str_ip + "\">Raw NMap Scan: " + ip + "</button>";
+
+      //Scan content
+      var raw_data_text = document.createElement("div");
+      // <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      raw_data_text.setAttribute("id", "scanCollapse" + str_ip);
+
+      // aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      raw_data_text.setAttribute("class", "accordion-collapse collapse");
+      raw_data_text.setAttribute("aria-labelledby", "scanheading" + str_ip);
+      raw_data_text.setAttribute("data-bs-parent", "accordionScan" + str_ip);
+
+      //raw_data_text.innerHTML = "<div class=\"accordion-body\"><pre>" + ip_json["raw_scan"] + "</pre></div>";
+      raw_data_text.innerHTML = "<div class=\"accordion-body\"><code><pre style=\"overflow-y:scroll; max-height:500px;\">" + ip_json["raw_scan"] + "</pre></code></div>";
+      //ul_datacontainer.appendChild(raw_data_text);
+      div_rdc_accitem.appendChild(raw_data_text);
+    }
+
 
     // Done adding data, add data container to scan data div
     var div_scandata_content = document.createTextNode(JSON.stringify(ip_json, undefined, 2));
@@ -191,6 +234,8 @@ $("#expandall").click(function(e) {
 */
 
 </script>
+
+
 </head>
 
 

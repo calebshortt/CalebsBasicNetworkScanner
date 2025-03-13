@@ -171,10 +171,9 @@ function addipscan(ip, ip_json) {
       var h2_accitem = document.createElement("h2");
       h2_accitem.setAttribute("class", "accordion-header");
       h2_accitem.setAttribute("id", "scanheading" + str_ip);
-      h2_accitem.setAttribute("style", "background-color: green;");
       div_rdc_accitem.appendChild(h2_accitem);
 
-      h2_accitem.innerHTML = "<button class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#scanCollapse" + str_ip + "\" aria-expanded=\"true\" aria-controls=\"scanCollapse" + str_ip + "\">Raw NMap Scan: " + ip + "</button>";
+      h2_accitem.innerHTML = "<button style=\"background-color: LightGray;\" class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#scanCollapse" + str_ip + "\" aria-expanded=\"true\" aria-controls=\"scanCollapse" + str_ip + "\">Raw NMap Scan: &nbsp<strong>" + ip + "</strong>&nbsp (Click to Expand)</button>";
 
       //Scan content
       var raw_data_text = document.createElement("div");

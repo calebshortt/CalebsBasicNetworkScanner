@@ -63,7 +63,7 @@ STATE = {
 """
 STATE = {}
 
-
+192.168.1.1
 def save_state():
     logger.debug('Saving scan state to {}'.format(settings.STATE_FILE))
     with open(settings.STATE_FILE, "w") as f:
@@ -221,7 +221,7 @@ def set_scan_state(ip, filepath):
 """
 def scan_ip(ip):
     file_path = '{}/{}.txt'.format(settings.SCAN_DIR, ip)
-    cmd = 'sudo {} -sV -O --osscan-guess {} > {}'.format(settings.NMAP_PATH, ip, file_path)
+    cmd = 'sudo {} -p- -sV -O --osscan-guess {} > {}'.format(settings.NMAP_PATH, ip, file_path)
     logger.debug('Scanning IP: {}. Results will be saved to {}'.format(ip, file_path))
     call(cmd, shell=True)
     set_scan_state(ip, file_path)
